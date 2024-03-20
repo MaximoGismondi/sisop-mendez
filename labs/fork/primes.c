@@ -19,14 +19,14 @@ void filter_primes(int fd_input)
     int fds_filter[2];
     if (pipe(fds_filter) == -1)
     {
-        perror("pipe");
+        printf("error in pipe\n");
         exit(1);
     }
 
     pid_t forked_pid = fork();
     if (forked_pid == -1)
     {
-        perror("fork");
+        printf("error in pipe\n");
         exit(1);
     }
 
@@ -35,12 +35,20 @@ void filter_primes(int fd_input)
         // PADRE
         close(fds_filter[FD_READ]);
 
-        int number;
+        int number, res;
         while (read(fd_input, &number, sizeof(number)) > 0)
         {
             if (number % prime != 0)
             {
-                write(fds_filter[FD_WRITE], &number, sizeof(number));
+                res = write(fds_filter[FD_WRITE],
+                            &number,
+                            sizeof(number));
+
+                if (res == -1)
+                {
+                    printf("error in write\n");
+                    exit(-1);
+                }
             }
         }
 
@@ -62,37 +70,45 @@ int main(int argc, char *argv[])
     if (argc != 2)
     {
         fprintf(stderr, "Uso: %s <n>\n", argv[0]);
-        return 1;
+        exit(-1);
     }
 
     int n = atoi(argv[1]);
     if (n < 2)
     {
         fprintf(stderr, "El número debe ser mayor o igual a 2.\n");
-        return 1;
+        exit(-1);
     }
 
     int fds_generator[2];
     if (pipe(fds_generator) == -1)
     {
-        perror("pipe");
-        return 1;
+        printf("error in pipe\n");
+        exit(-1);
     }
 
     pid_t forked_pid = fork();
     if (forked_pid == -1)
     {
-        perror("fork");
-        return 1;
+        printf("error in pipe\n");
+        exit(-1);
     }
 
     if (forked_pid > 0)
     {
         // GENERADOR
+        int res;
+
         close(fds_generator[FD_READ]);
         for (int i = 2; i <= n; ++i)
         {
-            write(fds_generator[FD_WRITE], &i, sizeof(i));
+            res = write(fds_generator[FD_WRITE], &i, sizeof(i));
+
+            if (res == -1)
+            {
+                printf("error in write\n");
+                exit(-1);
+            }
         }
         close(fds_generator[FD_WRITE]);
         wait(NULL);
