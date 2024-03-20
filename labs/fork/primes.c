@@ -69,14 +69,14 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        fprintf(stderr, "Uso: %s <n>\n", argv[0]);
+        printf("Uso: %s <n>\n", argv[0]);
         exit(-1);
     }
 
     int n = atoi(argv[1]);
     if (n < 2)
     {
-        fprintf(stderr, "El número debe ser mayor o igual a 2.\n");
+        printf("El número debe ser mayor o igual a 2.\n");
         exit(-1);
     }
 
