@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
     char *args[NARGS + 2];
     args[0] = command;
-    int args_index = 1; // Comienza en 1 ya que el comando es el primer argumento
+    int args_index = 1;
 
     while ((line_size = getline(&line, &len, stdin)) > 0)
     {
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     }
 
     if (args_index > 1)
-    { // Hay argumentos restantes por ejecutar
+    {
         args[args_index] = NULL;
         execute_command(args);
     }
