@@ -16,6 +16,21 @@ int isNumber(char *str)
     return 1;
 }
 
+int toNumber(char *str)
+{
+    if (!isNumber(str))
+    {
+        return -1;
+    }
+
+    int result = 0;
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        result = result * 10 + (str[i] - '0');
+    }
+    return result;
+}
+
 int main()
 {
 
@@ -33,8 +48,9 @@ int main()
 
     while ((entrada = readdir(dir)) != NULL)
     {
-        char *PID = entrada->d_name;
-        if (!isNumber(PID))
+        int PID = toNumber(entrada->d_name);
+
+        if (PID == -1)
         {
             continue;
         }
@@ -42,7 +58,7 @@ int main()
         char path[256];
         FILE *fp;
 
-        snprintf(path, sizeof(path), "/proc/%s/comm", PID);
+        snprintf(path, sizeof(path), "/proc/%d/comm", PID);
         fp = fopen(path, "r");
 
         if (!fp)
@@ -55,11 +71,11 @@ int main()
 
         if (fgets(nombre, sizeof(nombre), fp) != NULL)
         {
-            printf("%7s %s", PID, nombre);
+            printf("%7d %s", PID, nombre);
         }
         else
         {
-            printf("%7s [No se pudo leer el nombre del proceso]\n", PID);
+            printf("%7d [No se pudo leer el nombre del proceso]\n", PID);
         }
 
         fclose(fp);
