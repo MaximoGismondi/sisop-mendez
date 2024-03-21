@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <sys/wait.h>
 
 #ifndef NARGS
@@ -40,18 +39,17 @@ int main(int argc, char *argv[])
     }
 
     char *command = argv[1];
-    char *line = NULL;
-    size_t len = 0;
+    char *args[NARGS + 2];
+
+    size_t len;
     ssize_t line_size;
 
-    char *args[NARGS + 2];
     args[0] = command;
     int args_index = 1;
 
-    while ((line_size = getline(&line, &len, stdin)) > 0)
+    while ((line_size = getline(&args[args_index], &len, stdin)) > 0)
     {
-        line[line_size - 1] = '\0';
-        args[args_index] = strdup(line);
+        args[args_index][line_size - 1] = '\0';
 
         args_index++;
 
@@ -69,6 +67,5 @@ int main(int argc, char *argv[])
         execute_command(args);
     }
 
-    free(line);
     return 0;
 }
