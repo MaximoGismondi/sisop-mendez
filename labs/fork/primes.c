@@ -47,7 +47,7 @@ void filter_primes(int fd_input)
                 if (res == -1)
                 {
                     printf("error in write\n");
-                    exit(-1);
+                    exit(1);
                 }
             }
         }
@@ -70,28 +70,28 @@ int main(int argc, char *argv[])
     if (argc != 2)
     {
         printf("Uso: %s <n>\n", argv[0]);
-        exit(-1);
+        exit(1);
     }
 
     int n = atoi(argv[1]);
     if (n < 2)
     {
         printf("El número debe ser mayor o igual a 2.\n");
-        exit(-1);
+        exit(1);
     }
 
     int fds_generator[2];
     if (pipe(fds_generator) == -1)
     {
         printf("error in pipe\n");
-        exit(-1);
+        exit(1);
     }
 
     pid_t forked_pid = fork();
     if (forked_pid == -1)
     {
         printf("error in pipe\n");
-        exit(-1);
+        exit(1);
     }
 
     if (forked_pid > 0)
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
             if (res == -1)
             {
                 printf("error in write\n");
-                exit(-1);
+                exit(1);
             }
         }
         close(fds_generator[FD_WRITE]);

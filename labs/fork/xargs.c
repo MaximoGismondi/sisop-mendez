@@ -13,7 +13,7 @@ void execute_command(char *args[])
     if (forked_pid == -1)
     {
         printf("Error en fork\n");
-        exit(-1);
+        exit(1);
     }
 
     if (forked_pid == 0)
@@ -21,7 +21,7 @@ void execute_command(char *args[])
         if (execvp(args[0], args) == -1)
         {
             printf("Error en execvp\n");
-            exit(-1);
+            exit(1);
         }
     }
     else
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     if (argc != 2)
     {
         printf("Uso: %s <command>\n", argv[0]);
-        exit(-1);
+        exit(1);
     }
 
     char *command = argv[1];
