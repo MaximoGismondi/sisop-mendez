@@ -1,46 +1,24 @@
+#define _GNU_SOURCE
+
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <limits.h>
 #include <ctype.h>
 #include <stdbool.h>
-
-int isNumber(char *str)
-{
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        if (!isdigit(str[i]))
-            return 0;
-    }
-    return 1;
-}
-
-int toNumber(char *str)
-{
-    if (!isNumber(str))
-    {
-        return -1;
-    }
-
-    int result = 0;
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        result = result * 10 + (str[i] - '0');
-    }
-    return result;
-}
+#include <limits.h>
 
 int main()
 {
-
     DIR *dir;
     struct dirent *entrada;
 
     dir = opendir("/proc");
     if (dir == NULL)
     {
-        printf("No se pudo abrir el directorio /proc\n");
+        fprintf(stderr, "No se pudo abrir el directorio /proc\n");
         return 1;
     }
 
@@ -48,14 +26,14 @@ int main()
 
     while ((entrada = readdir(dir)) != NULL)
     {
-        int PID = toNumber(entrada->d_name);
+        int PID = atoi(entrada->d_name);
 
-        if (PID == -1)
+        if (PID == 0)
         {
             continue;
         }
 
-        char path[256];
+        char path[PATH_MAX];
         FILE *fp;
 
         snprintf(path, sizeof(path), "/proc/%d/comm", PID);
@@ -63,11 +41,11 @@ int main()
 
         if (!fp)
         {
-            printf("No se pudo abrir %s\n", path);
+            fprintf(stderr, "No se pudo abrir %s\n", path);
             continue;
         }
 
-        char nombre[256];
+        char nombre[NAME_MAX];
 
         if (fgets(nombre, sizeof(nombre), fp) != NULL)
         {
@@ -75,7 +53,7 @@ int main()
         }
         else
         {
-            printf("%7d [No se pudo leer el nombre del proceso]\n", PID);
+            fprintf(stderr, "No se pudo leer el nombre del proceso %d\n", PID);
         }
 
         fclose(fp);
