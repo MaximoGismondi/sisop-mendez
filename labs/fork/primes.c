@@ -62,6 +62,7 @@ void filter_primes(int fd_input)
         close(fds_filter[FD_WRITE]);
 
         filter_primes(fds_filter[FD_READ]);
+        close(fds_filter[FD_READ]);
     }
 }
 
@@ -118,6 +119,7 @@ int main(int argc, char *argv[])
         // FILTROS RECURSIVOS
         close(fds_generator[FD_WRITE]);
         filter_primes(fds_generator[FD_READ]);
+        close(fds_generator[FD_READ]);
     }
 
     return 0;
