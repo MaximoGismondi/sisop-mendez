@@ -100,3 +100,7 @@ Starvation: Un proceso no puede ejecutarse porque siempre hay procesos con mayor
 - **Boost:** Cada cierto tiempo, se aumenta la prioridad de todos los procesos y el round robin licua la ventaja que tienen los procesos iterativos.
 
 - **Aging:** No se reinicia el quantum de un proceso si este no termina en su quantum. De esta manera, los procesos iterativos que ceden la CPU terminan perdiendo prioridad.
+
+## Un buen algoritmo de scheduling
+
+Un buen algorithm de scheduling debe no solo manejar bien el Turnaround Time, sino también el Response Time y evitar el Starvation. Además debe hacerlo rápido, idealmene en $O(1)$.
