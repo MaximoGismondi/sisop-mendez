@@ -72,7 +72,7 @@ Es mejor que FIFO en términos de Turnaround Time, ya que se ejecutan primero lo
 
 Es una variante de SJF que se ejecuta el proceso que tiene el menor tiempo de ejecución restante al momento. Cuando un proceso llega, se compara su tiempo de ejecución con el tiempo de ejecución de los procesos en ejecución y se decide si se hace el contexto switch.
 
-### Round Robin (GOAT)
+### Round Robin
 
 Se ejecutan los procesos en orden de llegada y se les asigna un quantum de tiempo. Si el proceso no termina en el quantum, se hace un contexto switch y se le asigna el siguiente proceso.
 
@@ -95,7 +95,9 @@ Las reglas de ejecución de procesos son:
 
 Resuelve el problema de Round Robin de que si el quantum es muy grande, se convierte en FIFO y si es muy chico, se convierte en SJF. Además, se puede asignar un proceso a una cola con un quantum más grande si este proceso es largo.
 
-Starvation: Un proceso no puede ejecutarse porque siempre hay procesos con mayor prioridad. Esto puede ocurrir o bien porque hay muchos procesos iterativos que ceden la CPU, o bien porque un proceso malicioso cede la CPU para conservar la prioridad. Para resolver esto, se puede implementar:
+### Starvation
+
+Un proceso no puede ejecutarse porque siempre hay procesos con mayor prioridad. Esto puede ocurrir o bien porque hay muchos procesos iterativos que ceden la CPU, o bien porque un proceso malicioso cede la CPU para conservar la prioridad. Para resolver esto, se puede implementar:
 
 - **Boost:** Cada cierto tiempo, se aumenta la prioridad de todos los procesos y el round robin licua la ventaja que tienen los procesos iterativos.
 
